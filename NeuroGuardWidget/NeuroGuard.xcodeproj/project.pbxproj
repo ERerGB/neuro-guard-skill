@@ -1,0 +1,409 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6FD07F1EF5386F8573C1CCB0 /* NeuroGuardWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0ABACDAA70253C691B2FC91 /* NeuroGuardWidget.swift */; };
+		74738B983781EE380752DCED /* NeuroGuardWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58DF3FD9A76E924F2DC1B479 /* NeuroGuardWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		F99747401BBB664FB6C693FA /* NeuroGuardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7381E429813EE458F4360D1A /* NeuroGuardApp.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C9A42CFBA27281F3635C00FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B071B2AC086055F73B7DBD36 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2B0E597583E338DB017DE692;
+			remoteInfo = NeuroGuardWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D8AD471E9DD388C515BD8904 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				74738B983781EE380752DCED /* NeuroGuardWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		12D7DBFD7B2342C09A866798 /* NeuroGuardWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NeuroGuardWidget.entitlements; sourceTree = "<group>"; };
+		58DF3FD9A76E924F2DC1B479 /* NeuroGuardWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NeuroGuardWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		7381E429813EE458F4360D1A /* NeuroGuardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuroGuardApp.swift; sourceTree = "<group>"; };
+		7BF0AFACD2F0A29A54A0B6A2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		829E714410DC45E63A5232FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		879A2A8B8016ADB358BD4D2C /* NeuroGuard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NeuroGuard.entitlements; sourceTree = "<group>"; };
+		B0ABACDAA70253C691B2FC91 /* NeuroGuardWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeuroGuardWidget.swift; sourceTree = "<group>"; };
+		E3101C54E54DCE63A8D4AD7A /* NeuroGuard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NeuroGuard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0521066081817D8DBF45A8BF /* NeuroGuard */ = {
+			isa = PBXGroup;
+			children = (
+				7BF0AFACD2F0A29A54A0B6A2 /* Info.plist */,
+				879A2A8B8016ADB358BD4D2C /* NeuroGuard.entitlements */,
+				7381E429813EE458F4360D1A /* NeuroGuardApp.swift */,
+			);
+			path = NeuroGuard;
+			sourceTree = "<group>";
+		};
+		2C9E5445C7F31A7231BD9786 /* NeuroGuardWidget */ = {
+			isa = PBXGroup;
+			children = (
+				829E714410DC45E63A5232FE /* Info.plist */,
+				12D7DBFD7B2342C09A866798 /* NeuroGuardWidget.entitlements */,
+				B0ABACDAA70253C691B2FC91 /* NeuroGuardWidget.swift */,
+			);
+			path = NeuroGuardWidget;
+			sourceTree = "<group>";
+		};
+		669BDCD184ABBC6ACA7F2DBC /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E3101C54E54DCE63A8D4AD7A /* NeuroGuard.app */,
+				58DF3FD9A76E924F2DC1B479 /* NeuroGuardWidget.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		AFA5898157F8948C5F00DAB6 = {
+			isa = PBXGroup;
+			children = (
+				0521066081817D8DBF45A8BF /* NeuroGuard */,
+				2C9E5445C7F31A7231BD9786 /* NeuroGuardWidget */,
+				669BDCD184ABBC6ACA7F2DBC /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2B0E597583E338DB017DE692 /* NeuroGuardWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A584BDED972970C71767036 /* Build configuration list for PBXNativeTarget "NeuroGuardWidget" */;
+			buildPhases = (
+				8324B87ED15ED7DB970D4A1D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NeuroGuardWidget;
+			packageProductDependencies = (
+			);
+			productName = NeuroGuardWidget;
+			productReference = 58DF3FD9A76E924F2DC1B479 /* NeuroGuardWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		EB9452AB7882C0E74389FDBE /* NeuroGuard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D7317CF1F01E482A3D040B5 /* Build configuration list for PBXNativeTarget "NeuroGuard" */;
+			buildPhases = (
+				61E591CA6C5E3026C01DD97A /* Sources */,
+				D8AD471E9DD388C515BD8904 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0CC98334642B483B29595B95 /* PBXTargetDependency */,
+			);
+			name = NeuroGuard;
+			packageProductDependencies = (
+			);
+			productName = NeuroGuard;
+			productReference = E3101C54E54DCE63A8D4AD7A /* NeuroGuard.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B071B2AC086055F73B7DBD36 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 51D3D381298235843A381CB3 /* Build configuration list for PBXProject "NeuroGuard" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = AFA5898157F8948C5F00DAB6;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 669BDCD184ABBC6ACA7F2DBC /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				EB9452AB7882C0E74389FDBE /* NeuroGuard */,
+				2B0E597583E338DB017DE692 /* NeuroGuardWidget */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		61E591CA6C5E3026C01DD97A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F99747401BBB664FB6C693FA /* NeuroGuardApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8324B87ED15ED7DB970D4A1D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6FD07F1EF5386F8573C1CCB0 /* NeuroGuardWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0CC98334642B483B29595B95 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2B0E597583E338DB017DE692 /* NeuroGuardWidget */;
+			targetProxy = C9A42CFBA27281F3635C00FD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		17EDD0379C362A8752878DB6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NeuroGuardWidget/NeuroGuardWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = NeuroGuardWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neuroguard.app.NeuroGuardWidget;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		48608EB07562F96261D1C8AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		72003668813147855FD8C25C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NeuroGuard/NeuroGuard.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = NeuroGuard/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neuroguard.app;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Release;
+		};
+		B10D3F7DEBE10FDCEBC1B60B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NeuroGuardWidget/NeuroGuardWidget.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = NeuroGuardWidget/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neuroguard.app.NeuroGuardWidget;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+		BE6E7CDE2D422EB303A84AF7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E8B0E8106402D2ED3B0C1192 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = NeuroGuard/NeuroGuard.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = NeuroGuard/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.neuroguard.app;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0D7317CF1F01E482A3D040B5 /* Build configuration list for PBXNativeTarget "NeuroGuard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8B0E8106402D2ED3B0C1192 /* Debug */,
+				72003668813147855FD8C25C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		51D3D381298235843A381CB3 /* Build configuration list for PBXProject "NeuroGuard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BE6E7CDE2D422EB303A84AF7 /* Debug */,
+				48608EB07562F96261D1C8AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8A584BDED972970C71767036 /* Build configuration list for PBXNativeTarget "NeuroGuardWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B10D3F7DEBE10FDCEBC1B60B /* Debug */,
+				17EDD0379C362A8752878DB6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = B071B2AC086055F73B7DBD36 /* Project object */;
+}

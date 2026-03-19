@@ -1,0 +1,37 @@
+name: Build macOS NeuroGuard
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate Xcode project
+        run: |
+          brew install xcodegen
+          cd NeuroGuardWidget && xcodegen generate
+
+      - name: Build NeuroGuard.app
+        run: |
+          cd NeuroGuardWidget
+          xcodebuild -scheme NeuroGuard -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Zip NeuroGuard.app
+        run: |
+          cd NeuroGuardWidget
+          ditto -c -k --keepParent build/Build/Products/Release/NeuroGuard.app NeuroGuard.app.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeuroGuard-macOS
+          path: NeuroGuardWidget/NeuroGuard.app.zip

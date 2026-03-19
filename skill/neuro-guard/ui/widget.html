@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuro Guard Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: rgba(15, 15, 19, 0.65);
+      --blur: blur(24px);
+      --text-main: #ffffff;
+      --text-sub: rgba(255, 255, 255, 0.5);
+      --border: rgba(255, 255, 255, 0.1);
+      
+      /* Theme colors (dynamically updated via JS) */
+      --theme-color: #4ade80; /* Green (OK) */
+      --theme-glow: rgba(74, 222, 128, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #000 url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2070&auto=format&fit=crop') center/cover;
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    /* The main widget card */
+    .widget {
+      position: relative;
+      width: 320px;
+      padding: 24px;
+      border-radius: 28px;
+      background: var(--bg);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+      overflow: hidden;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Ambient glow inside the card based on tier */
+    .widget::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 0%, var(--theme-glow) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.5s ease;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header: Status Pill */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill {
+      font-family: 'JetBrains Mono', monospace;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--border);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--theme-color);
+      transition: color 0.3s ease;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--theme-color);
+      box-shadow: 0 0 8px var(--theme-color);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.95); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(0.95); opacity: 0.5; }
+    }
+
+    /* Main countdown area */
+    .countdown-section {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .countdown-label {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .time-remaining {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 46px;
+      font-weight: 300;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      color: var(--text-main);
+      text-shadow: 0 0 20px var(--theme-glow);
+    }
+
+    .target-time {
+      font-size: 14px;
+      color: var(--theme-color);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 30%;
+      background: var(--theme-color);
+      border-radius: 2px;
+      box-shadow: 0 0 10px var(--theme-color);
+      transition: width 1s linear, background 0.5s ease;
+    }
+
+    /* Next Event Card */
+    .event-card {
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .event-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .event-title {
+      font-size: 15px;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .event-time {
+      font-size: 13px;
+      color: var(--theme-color);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .snooze-info {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-top: 16px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="widget" id="widget">
+    <div class="content">
+      <div class="header">
+        <div class="brand">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          NEURO GUARD
+        </div>
+        <div class="status-pill">
+          <div class="pulse-dot"></div>
+          <span id="ui-tier">NOMINAL</span>
+        </div>
+      </div>
+
+      <div class="countdown-section">
+        <div class="countdown-label">Time to Rest Cutoff</div>
+        <div class="time-remaining" id="ui-countdown">02:45:10</div>
+        <div class="target-time">Target: <span id="ui-target">22:30</span></div>
+      </div>
+
+      <div class="progress-track">
+        <div class="progress-fill" id="ui-progress"></div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-label">Next Critical Event</div>
+        <div class="event-title" id="ui-event-title">Investor Pitch (Demo)</div>
+        <div class="event-time">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="ui-event-time">Tomorrow 09:00</span>
+        </div>
+      </div>
+
+      <div class="snooze-info" id="ui-snooze">
+        Snoozes available: 2/2
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const themes = {
+      'OK': { color: '#4ade80', label: 'NOMINAL', progress: '15%' },
+      'WARN': { color: '#f59e0b', label: 'WIND DOWN', progress: '65%' },
+      'DIM': { color: '#f59e0b', label: 'WIND DOWN', progress: '75%' },
+      'FINAL_WARN': { color: '#f97316', label: 'CRITICAL', progress: '90%' },
+      'LOCK': { color: '#ef4444', label: 'LOCKDOWN', progress: '100%' }
+    };
+
+    let minutesRemaining = 165; // for countdown tick when no telemetry
+
+    function formatCountdown(min) {
+      if (min <= 0) return '00:00:00';
+      const h = Math.floor(min / 60);
+      const m = Math.floor(min % 60);
+      const s = Math.floor((min % 1) * 60) || 0;
+      return `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    }
+
+    function setTier(tier) {
+      const t = tier || 'OK';
+      const config = themes[t] || themes['OK'];
+      const root = document.documentElement;
+      root.style.setProperty('--theme-color', config.color);
+      let hex = config.color.replace('#', '');
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+      root.style.setProperty('--theme-glow', `rgba(${r}, ${g}, ${b}, 0.2)`);
+      document.getElementById('ui-tier').innerText = config.label;
+      document.getElementById('ui-progress').style.width = config.progress;
+    }
+
+    function applyTelemetry(data) {
+      const tier = data.tier || 'OK';
+      setTier(tier);
+      minutesRemaining = Math.max(0, data.minutes_to_cutoff || 0);
+      document.getElementById('ui-countdown').innerText = formatCountdown(minutesRemaining);
+      document.getElementById('ui-target').innerText = data.cutoff_time || '—';
+      document.getElementById('ui-event-title').innerText = data.event_title || '—';
+      document.getElementById('ui-event-time').innerText = data.event_time ? `Tomorrow ${data.event_time}` : '—';
+      const sc = data.snooze_count ?? 0;
+      const mx = data.max_snooze ?? 2;
+      document.getElementById('ui-snooze').innerText = `Snoozes available: ${mx - sc}/${mx}`;
+    }
+
+    async function fetchTelemetry() {
+      try {
+        const r = await fetch('/telemetry');
+        if (r.ok) {
+          const data = await r.json();
+          applyTelemetry(data);
+          return true;
+        }
+      } catch (_) {}
+      return false;
+    }
+
+    // Poll telemetry when served via serve.py (localhost)
+    const isServed = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost';
+    if (isServed) {
+      fetchTelemetry();
+      setInterval(fetchTelemetry, 5000);
+      setInterval(() => {
+        if (minutesRemaining > 0) {
+          minutesRemaining -= 1/60;
+          document.getElementById('ui-countdown').innerText = formatCountdown(minutesRemaining);
+        }
+      }, 1000);
+    } else {
+      setTier('OK');
+      document.getElementById('ui-countdown').innerText = '--:--:--';
+      document.getElementById('ui-event-title').innerText = 'Run: python3 serve.py';
+      document.getElementById('ui-snooze').innerText = 'No telemetry (open via serve.py)';
+    }
+  </script>
+</body>
+</html>

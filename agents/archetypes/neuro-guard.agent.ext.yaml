@@ -1,0 +1,5 @@
+archetype: wellness-ops
+scenario: deep-work-regulation
+adr: ADR-NEURO-GUARD-001
+config:
+  maxIdleTurns: 4
