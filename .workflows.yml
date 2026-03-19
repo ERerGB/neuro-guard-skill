@@ -1,0 +1,22 @@
+# Workflow Registry — Neuro Guard macOS build
+# Used by Wander for check_window and notifications.
+version: "1.0"
+
+project:
+  name: "neuro-guard-skill"
+  description: "Neuro Guard skill + WidgetKit macOS app"
+  last_updated: "2026-03-19"
+
+workflows:
+  - name: "build-macos.yml"
+    description: "Build NeuroGuard.app (WidgetKit, Notification Center)"
+    check_window: 120
+    expected_duration: 90
+    category: "build"
+    priority: 2
+    tags:
+      - "macos"
+      - "widget"
+      - "xcode"
+    metadata:
+      trigger: "push to main"

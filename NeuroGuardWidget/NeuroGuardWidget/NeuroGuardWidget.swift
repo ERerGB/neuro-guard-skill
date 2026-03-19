@@ -15,16 +15,18 @@ struct NeuroGuardEntry: TimelineEntry {
 
 // MARK: - Timeline Provider
 struct NeuroGuardProvider: TimelineProvider {
-    private let appGroupId = "group.com.neuroguard.shared"
+    private let telemetryPath = FileManager.default.homeDirectoryForCurrentUser
+        .appendingPathComponent(".neuro-guard-telemetry.json")
+
+    private static let fallback = NeuroGuardEntry(
+        date: Date(), tier: "OK", eventTitle: "—", eventTime: "—",
+        cutoffTime: "—", minutesToCutoff: 0, snoozeCount: 0, maxSnooze: 2
+    )
 
     private func loadTelemetry() -> NeuroGuardEntry {
-        guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId) else {
-            return NeuroGuardEntry(date: Date(), tier: "OK", eventTitle: "—", eventTime: "—", cutoffTime: "—", minutesToCutoff: 0, snoozeCount: 0, maxSnooze: 2)
-        }
-        let fileURL = container.appendingPathComponent("telemetry.json")
-        guard let data = try? Data(contentsOf: fileURL),
+        guard let data = try? Data(contentsOf: telemetryPath),
               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
-            return NeuroGuardEntry(date: Date(), tier: "OK", eventTitle: "—", eventTime: "—", cutoffTime: "—", minutesToCutoff: 0, snoozeCount: 0, maxSnooze: 2)
+            return Self.fallback
         }
         return NeuroGuardEntry(
             date: Date(),

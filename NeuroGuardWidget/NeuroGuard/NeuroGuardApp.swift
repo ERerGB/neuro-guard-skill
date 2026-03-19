@@ -15,7 +15,6 @@ struct NeuroGuardApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
     private var syncTimer: Timer?
-    private let appGroupId = "group.com.neuroguard.shared"
     private let telemetryPath = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent(".neuro-guard-telemetry.json")
 
@@ -37,31 +36,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(quitItem)
         statusItem?.menu = menu
 
-        syncTelemetry()
+        updateMenuBarIcon()
         syncTimer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
-            self?.syncTelemetry()
+            self?.updateMenuBarIcon()
         }
         RunLoop.current.add(syncTimer!, forMode: .common)
     }
 
-    @objc private func syncTelemetry() {
-        guard let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroupId) else { return }
-        let destURL = container.appendingPathComponent("telemetry.json")
+    @objc private func updateMenuBarIcon() {
+        guard let data = try? Data(contentsOf: telemetryPath),
+              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let tier = json["tier"] as? String else { return }
 
-        guard let data = try? Data(contentsOf: telemetryPath) else { return }
-        try? data.write(to: destURL)
-
-        if let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-           let tier = json["tier"] as? String {
-            let emoji: String
-            switch tier {
-            case "LOCK": emoji = "🔴"
-            case "FINAL_WARN": emoji = "🟠"
-            case "WARN", "DIM": emoji = "🟡"
-            default: emoji = "🟢"
-            }
-            statusItem?.button?.title = emoji
+        let emoji: String
+        switch tier {
+        case "LOCK": emoji = "🔴"
+        case "FINAL_WARN": emoji = "🟠"
+        case "WARN", "DIM": emoji = "🟡"
+        default: emoji = "🟢"
         }
+        statusItem?.button?.title = emoji
 
         WidgetCenter.shared.reloadAllTimelines()
     }

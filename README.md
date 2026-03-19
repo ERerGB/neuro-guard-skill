@@ -18,7 +18,17 @@ This repository treats the problem as a protocol problem, not a willpower proble
 
 ## macOS Widget (Notification Center)
 
-A GitHub Action builds the NeuroGuard.app on every push to `main`. Download the artifact from [Actions](https://github.com/ERerGB/neuro-guard-skill/actions), unzip, and run `NeuroGuard.app`. No Xcode required locally.
+A GitHub Action builds the NeuroGuard.app on every push to `main`.
+
+**Setup:**
+1. Download the `NeuroGuard-macOS` artifact from [Actions](https://github.com/ERerGB/neuro-guard-skill/actions) (latest run → Artifacts).
+2. Unzip and move `NeuroGuard.app` to Applications or keep in Downloads.
+3. Run `NeuroGuard.app` — a menu bar icon appears.
+4. Click the date/time in the menu bar → Edit Widgets → add "Neuro Guard" to the sidebar.
+
+**Usage:** The app syncs `~/.neuro-guard-telemetry.json` (from the daemon) to the widget every 10s. Click the widget to open the full web view at http://127.0.0.1:9877/ (requires `serve.py` or daemon to be running).
+
+**Monitor CI build** (optional): After `git push`, run `./scripts/watch-build.sh` to get a macOS notification when the build completes. Requires [Wander](https://github.com/ERerGB/wander) cloned as a sibling repo.
 
 ## Configuration (manual)
 
@@ -62,6 +72,19 @@ Replace with your actual Magpie API proxy URL. Without this file, LLM notificati
    ./scripts/daemon.sh uninstall
    ```
 
+## Daily usage (after setup)
+
+| What you want | Command or action |
+|---------------|-------------------|
+| Check if daemon is running | `./scripts/daemon.sh status` |
+| See recent logs | `./scripts/daemon.sh logs` |
+| Skip tonight (no lock) | `./scripts/daemon.sh override` |
+| Extend 30 min when offered | `./scripts/daemon.sh snooze` |
+| Menu bar status + open full view | `./scripts/run-tray.sh` |
+| Standalone web widget | `python3 skill/neuro-guard/ui/serve.py` then open http://127.0.0.1:9877/ |
+
+The daemon runs in the background via LaunchAgent. You get macOS notifications at tier transitions (WARN → DIM → FINAL_WARN → LOCK). The menu bar tray shows tier + countdown; "Open full view" starts the web server and opens the status card in the browser.
+
 5. **Menu bar tray** (optional) — passive status in menu bar, click to open full web view:
    ```bash
    ./scripts/run-tray.sh
@@ -76,6 +99,8 @@ Replace with your actual Magpie API proxy URL. Without this file, LLM notificati
 
 ## Repository layout
 
+- `.workflows.yml`: Wander workflow registry (CI build monitoring).
+- `scripts/watch-build.sh`: Monitor build-macos workflow via Wander.
 - `skill/neuro-guard/SKILL.md`: OpenClaw-compatible skill entry.
 - `skill/neuro-guard/references/protocols.md`: Operational playbook and decision rules.
 - `skill/neuro-guard/scripts/guard.py`: Calendar-driven daemon (main runtime).
