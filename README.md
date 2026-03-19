@@ -18,7 +18,7 @@ This repository treats the problem as a protocol problem, not a willpower proble
 
 ## macOS Widget (Notification Center)
 
-A GitHub Action builds the NeuroGuard.app on every push to `main`. Download the artifact from [Actions](https://github.com/<owner>/neuro-guard-skill/actions), unzip, and run `NeuroGuard.app`. No Xcode required locally.
+A GitHub Action builds the NeuroGuard.app on every push to `main`. Download the artifact from [Actions](https://github.com/ERerGB/neuro-guard-skill/actions), unzip, and run `NeuroGuard.app`. No Xcode required locally.
 
 ## Quick setup (Calendar-driven daemon)
 
