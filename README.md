@@ -20,6 +20,16 @@ This repository treats the problem as a protocol problem, not a willpower proble
 
 A GitHub Action builds the NeuroGuard.app on every push to `main`. Download the artifact from [Actions](https://github.com/ERerGB/neuro-guard-skill/actions), unzip, and run `NeuroGuard.app`. No Xcode required locally.
 
+## Configuration (manual)
+
+Create `~/.neuro-guard.env` with your API proxy URL. The daemon and login script read this at runtime:
+
+```bash
+echo 'NEURO_GUARD_API_URL=https://your-api-proxy.example.com' > ~/.neuro-guard.env
+```
+
+Replace with your actual Magpie API proxy URL. Without this file, LLM notifications fall back to static messages.
+
 ## Quick setup (Calendar-driven daemon)
 
 1. **Calendar auth** — one-time Google Calendar OAuth:
