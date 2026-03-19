@@ -3,7 +3,6 @@ options:
   bundleIdPrefix: com.neuroguard
   deploymentTarget:
     macOS: "14.0"
-  xcodeVersion: "15.0"
   generateEmptyDirectories: true
   groupSortPosition: top
   createIntermediateGroups: true

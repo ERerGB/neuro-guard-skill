@@ -2,6 +2,7 @@ __pycache__/
 *.pyc
 .DS_Store
 .env
+NeuroGuardWidget/NeuroGuard.xcodeproj/
 credentials.json
 client_secret_*.json
 token.json

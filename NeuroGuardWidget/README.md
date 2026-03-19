@@ -10,7 +10,9 @@ WidgetKit extension that shows Neuro Guard status in the macOS Notification Cent
 
 ## Build
 
-### Option A: Using XcodeGen (recommended)
+### Option A: Using XcodeGen (required)
+
+The `.xcodeproj` is not committed (generated from `project.yml`). Generate before opening:
 
 ```bash
 cd NeuroGuardWidget
