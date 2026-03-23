@@ -83,7 +83,7 @@ Replace with your actual Magpie API proxy URL. Without this file, LLM notificati
 | Menu bar status + open full view | `./scripts/run-tray.sh` |
 | Standalone web widget | `python3 skill/neuro-guard/ui/serve.py` then open http://127.0.0.1:9877/ |
 
-The daemon runs in the background via LaunchAgent. You get macOS notifications at tier transitions (WARN → DIM → FINAL_WARN → LOCK). The menu bar tray shows tier + countdown; "Open full view" starts the web server and opens the status card in the browser.
+The daemon runs in the background via LaunchAgent. You get macOS notifications at tier transitions (WARN → DIM → FINAL_WARN → LOCK). **NeuroGuard.app** uses a monochrome SF Symbol in the menu bar (template style, same black/white treatment as system extras); hover the icon for the current tier. "Open full view" opens the status card in the browser.
 
 5. **Menu bar tray** (optional) — passive status in menu bar, click to open full web view:
    ```bash

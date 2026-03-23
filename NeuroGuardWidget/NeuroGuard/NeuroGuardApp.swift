@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 import WidgetKit
 
@@ -22,9 +23,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
 
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
-        if let button = statusItem?.button {
-            button.title = "🟢"
-        }
+        applyMenuBarIcon(tier: "OK")
 
         let menu = NSMenu()
         let openItem = NSMenuItem(title: "Open full view", action: #selector(openFullView), keyEquivalent: "")
@@ -43,20 +42,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         RunLoop.current.add(syncTimer!, forMode: .common)
     }
 
-    @objc private func updateMenuBarIcon() {
-        guard let data = try? Data(contentsOf: telemetryPath),
-              let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-              let tier = json["tier"] as? String else { return }
-
-        let emoji: String
+    /// SF Symbol names — template rendering matches system menu bar (black / white by appearance).
+    private static func symbolName(forTier tier: String) -> String {
         switch tier {
-        case "LOCK": emoji = "🔴"
-        case "FINAL_WARN": emoji = "🟠"
-        case "WARN", "DIM": emoji = "🟡"
-        default: emoji = "🟢"
+        case "LOCK": return "lock.fill"
+        case "FINAL_WARN": return "exclamationmark.triangle.fill"
+        case "WARN", "DIM": return "exclamationmark.circle"
+        default: return "circle"
         }
-        statusItem?.button?.title = emoji
+    }
 
+    /// Monochrome status item (no emoji); urgency only by glyph shape + tooltip.
+    private func applyMenuBarIcon(tier: String) {
+        guard let button = statusItem?.button else { return }
+        let name = Self.symbolName(forTier: tier)
+        let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .medium)
+        if let image = NSImage(systemSymbolName: name, accessibilityDescription: "Neuro Guard")?
+            .withSymbolConfiguration(config) {
+            image.isTemplate = true
+            button.title = ""
+            button.image = image
+            button.imagePosition = .imageOnly
+        } else {
+            // Fallback if SF Symbols unavailable (should not happen on macOS 14+)
+            button.image = nil
+            button.title = "●"
+        }
+        button.toolTip = "Neuro Guard · \(tier)"
+    }
+
+    @objc private func updateMenuBarIcon() {
+        var tier = "OK"
+        if let data = try? Data(contentsOf: telemetryPath),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let t = json["tier"] as? String {
+            tier = t
+        }
+        applyMenuBarIcon(tier: tier)
         WidgetCenter.shared.reloadAllTimelines()
     }
 
