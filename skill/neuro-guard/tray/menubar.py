@@ -15,6 +15,9 @@ TELEMETRY_PATH = Path.home() / ".neuro-guard-telemetry.json"
 WIDGET_URL = "http://127.0.0.1:9877/"
 PORT = 9877
 SERVE_SCRIPT = Path(__file__).resolve().parent.parent / "ui" / "serve.py"
+# skill/neuro-guard/tray/menubar.py -> repo root (for venv python when spawning serve.py)
+_REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+_VENV_PYTHON = _REPO_ROOT / ".venv" / "bin" / "python3"
 
 TIER_LABELS = {
     "OK": "NOMINAL",
@@ -64,8 +67,9 @@ def start_serve_background():
     if is_port_in_use(PORT):
         return
     if SERVE_SCRIPT.exists():
+        py = str(_VENV_PYTHON) if _VENV_PYTHON.is_file() else "python3"
         subprocess.Popen(
-            ["python3", str(SERVE_SCRIPT)],
+            [py, str(SERVE_SCRIPT)],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             start_new_session=True,

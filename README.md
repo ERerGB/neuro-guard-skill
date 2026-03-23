@@ -62,7 +62,14 @@ Replace with your actual Magpie API proxy URL. Without this file, LLM notificati
    ./scripts/daemon.sh install
    ```
 
-4. **Daemon commands**:
+4. **Menu bar tray (LaunchAgent)** — same pattern as the daemon; loads at login in your GUI session (`Aqua`):
+   ```bash
+   chmod +x scripts/neuro_guard_tray_runner.sh scripts/tray.sh
+   ./scripts/tray.sh install
+   ```
+   Prefer this over running Python manually. Logs: `~/Library/Logs/NeuroGuard/neuro-guard-tray.log`. Commands: `tray.sh status`, `tray.sh restart` (after code changes), `tray.sh stop` / `uninstall`.
+
+5. **Daemon commands**:
    ```bash
    ./scripts/daemon.sh status   # running state + last logs
    ./scripts/daemon.sh logs     # tail log
@@ -80,18 +87,12 @@ Replace with your actual Magpie API proxy URL. Without this file, LLM notificati
 | See recent logs | `./scripts/daemon.sh logs` |
 | Skip tonight (no lock) | `./scripts/daemon.sh override` |
 | Extend 30 min when offered | `./scripts/daemon.sh snooze` |
-| Menu bar status + open full view | `./scripts/run-tray.sh` |
+| Menu bar status + open full view | `./scripts/tray.sh install` (LaunchAgent) then `./scripts/tray.sh status` |
 | Standalone web widget | `python3 skill/neuro-guard/ui/serve.py` then open http://127.0.0.1:9877/ |
 
 The daemon runs in the background via LaunchAgent. You get macOS notifications at tier transitions (WARN → DIM → FINAL_WARN → LOCK). **NeuroGuard.app** uses a monochrome SF Symbol in the menu bar (template style, same black/white treatment as system extras); hover the icon for the current tier. "Open full view" opens the status card in the browser.
 
-5. **Menu bar tray** (optional) — passive status in menu bar, click to open full web view:
-   ```bash
-   ./scripts/run-tray.sh
-   ```
-   Requires `pip install rumps`. Menu bar uses **monochrome symbols** (no colored emoji); "Open full view" starts the web server and opens the full widget in browser.
-
-6. **Widget** (optional) — full web view, or run standalone:
+**Widget** (optional) — full web view, or run standalone:
    ```bash
    python3 skill/neuro-guard/ui/serve.py
    ```
@@ -110,6 +111,7 @@ The daemon runs in the background via LaunchAgent. You get macOS notifications a
 - `skill/neuro-guard/ui/widget.html`: Status card (Matrix-style).
 - `skill/neuro-guard/ui/serve.py`: Local server for widget + telemetry.
 - `skill/neuro-guard/tray/menubar.py`: Menu bar app (rumps); click opens full web view.
+- `scripts/tray.sh` / `scripts/com.neuroguard.tray.plist` / `scripts/neuro_guard_tray_runner.sh`: LaunchAgent for the tray (`com.neuroguard.tray`).
 - `tests/test_neuro_guard.py`, `tests/test_guard_v2.py`: Boundary and policy tests.
 
 ## MVP boundaries
