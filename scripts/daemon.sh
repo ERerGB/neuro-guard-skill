@@ -32,7 +32,7 @@ cmd_install() {
 
     if [ ! -f "$VENV_PYTHON" ]; then
         echo "Error: venv not found at $VENV_PYTHON"
-        echo "Run: cd $PROJECT_ROOT && python3 -m venv .venv && source .venv/bin/activate && pip install google-api-python-client google-auth-httplib2 google-auth-oauthlib"
+        echo "Run: cd $PROJECT_ROOT && python3 -m venv .venv && .venv/bin/pip install -r requirements.txt"
         exit 1
     fi
 

@@ -45,6 +45,7 @@ from googleapiclient.discovery import build
 OVERRIDE_FILE = Path.home() / ".neuro-guard-override"
 SNOOZE_FILE = Path.home() / ".neuro-guard-snooze"
 STATE_FILE = Path.home() / ".neuro-guard-state.json"
+TELEMETRY_FILE = Path.home() / ".neuro-guard-telemetry.json"
 
 
 # ---------------------------------------------------------------------------
@@ -86,6 +87,37 @@ def consume_snooze() -> bool:
         SNOOZE_FILE.unlink(missing_ok=True)
         return True
     return False
+
+
+def write_telemetry(
+    now: datetime,
+    config: GuardConfig,
+    state: dict,
+    *,
+    tier: str,
+    event_title: str = "—",
+    event_time: str = "—",
+    cutoff_time: str = "—",
+    minutes_to_cutoff: float = 0.0,
+    idle_reason: str | None = None,
+) -> None:
+    """Keep menu bar / widget in sync even when guard is inactive (override, no events)."""
+    data: dict = {
+        "tier": tier,
+        "event_title": event_title,
+        "event_time": event_time,
+        "cutoff_time": cutoff_time,
+        "minutes_to_cutoff": round(minutes_to_cutoff, 1),
+        "snooze_count": state.get("snooze_count", 0),
+        "max_snooze": config.max_snooze_count,
+        "updated_at": now.isoformat(),
+    }
+    if idle_reason:
+        data["idle_reason"] = idle_reason
+    try:
+        TELEMETRY_FILE.write_text(json.dumps(data, ensure_ascii=False))
+    except OSError:
+        pass
 
 
 def clean_override_on_new_day(today: str) -> None:
@@ -151,8 +183,16 @@ def compute_cutoff(earliest_critical: datetime, config: GuardConfig) -> datetime
 
 
 def compute_intervention_tier(now: datetime, cutoff: datetime, config: GuardConfig) -> str | None:
-    """WARN → DIM → FINAL_WARN → LOCK → POST_LOCK."""
+    """WARN → DIM → FINAL_WARN → LOCK (only before and at cutoff).
+
+    After cutoff, returns None: the pre-cutoff ladder does not apply. A negative
+    ``minutes_to_cutoff`` used to satisfy every ``<= threshold`` branch and stuck
+    the UI at LOCK forever; telemetry should show OK while post-cutoff lock /
+    snooze state machine still runs via ``exec_tier`` in ``run_check``.
+    """
     minutes_to_cutoff = (cutoff - now).total_seconds() / 60
+    if minutes_to_cutoff < 0:
+        return None
 
     if minutes_to_cutoff <= config.lock_minutes_before:
         return "LOCK"
@@ -280,42 +320,45 @@ def run_check(config: GuardConfig, state: dict, dry_run: bool = False) -> dict:
 
     if is_override_active():
         print(f"[{now.strftime('%H:%M:%S')}] Override active. Guard skipped tonight.")
+        write_telemetry(now, config, state, tier="OK", idle_reason="override")
         return state
 
     result = fetch_earliest_critical_tomorrow(config)
 
     if result is None:
         print(f"[{now.strftime('%H:%M:%S')}] No critical events tomorrow. Guard is off.")
+        write_telemetry(now, config, state, tier="OK", idle_reason="no_critical_events_tomorrow")
         return state
 
     earliest, event_title = result
     cutoff = compute_cutoff(earliest, config)
+    minutes_to_cutoff = (cutoff - now).total_seconds() / 60
     tier = compute_intervention_tier(now, cutoff, config)
+    # After cutoff, ladder tier is None but lock/snooze state machine still runs
+    exec_tier = tier if tier is not None else ("LOCK" if minutes_to_cutoff < 0 else None)
     idle = get_mac_idle_seconds()
     user_active = idle < config.idle_threshold_seconds
 
     tag = f"Critical: {earliest.strftime('%H:%M')} → Cutoff: {cutoff.strftime('%H:%M')}"
-    print(f"[{now.strftime('%H:%M:%S')}] {tag} | Tier: {tier or 'OK'} | Idle: {idle:.0f}s | Snooze: {state.get('snooze_count', 0)}/{config.max_snooze_count}")
+    print(
+        f"[{now.strftime('%H:%M:%S')}] {tag} | Tier: {tier or 'OK'} | "
+        f"Idle: {idle:.0f}s | Snooze: {state.get('snooze_count', 0)}/{config.max_snooze_count}"
+    )
 
-    # --- Write telemetry for UI Widget ---
-    try:
-        minutes_to_cutoff = (cutoff - now).total_seconds() / 60
-        telemetry = {
-            "tier": tier or "OK",
-            "event_title": event_title,
-            "event_time": earliest.strftime("%H:%M"),
-            "cutoff_time": cutoff.strftime("%H:%M"),
-            "minutes_to_cutoff": round(minutes_to_cutoff, 1),
-            "snooze_count": state.get("snooze_count", 0),
-            "max_snooze": config.max_snooze_count,
-            "updated_at": now.isoformat()
-        }
-        (Path.home() / ".neuro-guard-telemetry.json").write_text(json.dumps(telemetry, ensure_ascii=False))
-    except Exception as e:
-        pass
+    # --- Write telemetry for UI Widget / menu bar ---
+    write_telemetry(
+        now,
+        config,
+        state,
+        tier=tier or "OK",
+        event_title=event_title,
+        event_time=earliest.strftime("%H:%M"),
+        cutoff_time=cutoff.strftime("%H:%M"),
+        minutes_to_cutoff=minutes_to_cutoff,
+    )
 
     # Skip notify tiers when user idle (away from keyboard); LOCK always executes
-    if not user_active and tier != "LOCK":
+    if not user_active and exec_tier != "LOCK":
         if tier:
             print(f"  User idle ({idle:.0f}s), skipping intervention.")
         return state
@@ -346,7 +389,7 @@ def run_check(config: GuardConfig, state: dict, dry_run: bool = False) -> dict:
     #   snooze_until:       if snooze active, when it expires
     #   snooze_count:       how many snoozes used today
 
-    if tier == "LOCK":
+    if exec_tier == "LOCK":
         snooze_count = state.get("snooze_count", 0)
 
         # --- Active snooze window: user already snoozed, respect it ---

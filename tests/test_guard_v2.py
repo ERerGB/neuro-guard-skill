@@ -5,9 +5,44 @@ import sys
 import unittest
 from datetime import datetime
 from pathlib import Path
+from types import ModuleType
 from zoneinfo import ZoneInfo
 
 SCRIPTS_DIR = Path(__file__).resolve().parents[1] / "skill" / "neuro-guard" / "scripts"
+
+
+def _install_google_stubs() -> None:
+    """Allow importing guard.py without google-* packages (tier tests are pure)."""
+    if "googleapiclient.discovery" in sys.modules:
+        return
+
+    def _stub(name: str) -> ModuleType:
+        m = ModuleType(name)
+        sys.modules[name] = m
+        return m
+
+    _stub("google")
+    _stub("google.auth")
+    ta = _stub("google.auth.transport")
+    tar = _stub("google.auth.transport.requests")
+    tar.Request = object  # type: ignore[attr-defined]
+    ta.requests = tar  # type: ignore[attr-defined]
+    go = _stub("google.oauth2")
+    goc = _stub("google.oauth2.credentials")
+    goc.Credentials = object  # type: ignore[attr-defined]
+    go.credentials = goc  # type: ignore[attr-defined]
+    gaf = _stub("google_auth_oauthlib.flow")
+    gaf.InstalledAppFlow = object  # type: ignore[attr-defined]
+    gap = _stub("googleapiclient")
+    gad = _stub("googleapiclient.discovery")
+
+    def _build(*_a, **_kw):  # pragma: no cover
+        raise RuntimeError("calendar API not available in stubbed tests")
+
+    gad.build = _build  # type: ignore[attr-defined]
+
+
+_install_google_stubs()
 
 # Add scripts dir to sys.path so guard.py can find its sibling modules
 if str(SCRIPTS_DIR) not in sys.path:
@@ -91,9 +126,10 @@ class InterventionTierTests(unittest.TestCase):
         now = datetime(2026, 3, 19, 22, 30, tzinfo=TZ)
         self.assertEqual("LOCK", compute_intervention_tier(now, self.cutoff, self.config))
 
-    def test_lock_past_cutoff(self) -> None:
+    def test_none_past_cutoff_ladder_ends(self) -> None:
+        """After cutoff, ladder tier is None (UI shows OK); lock state machine uses exec_tier."""
         now = datetime(2026, 3, 19, 23, 0, tzinfo=TZ)
-        self.assertEqual("LOCK", compute_intervention_tier(now, self.cutoff, self.config))
+        self.assertIsNone(compute_intervention_tier(now, self.cutoff, self.config))
 
 
 class StateManagementTests(unittest.TestCase):
