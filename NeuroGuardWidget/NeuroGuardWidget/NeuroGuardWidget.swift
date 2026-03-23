@@ -80,7 +80,9 @@ struct NeuroGuardWidgetView: View {
     }
 
     private var countdownText: String {
-        let m = max(0, entry.minutesToCutoff)
+        // Telemetry uses 0 when there is no active cutoff (no event / idle). Avoid showing 00:00.
+        let m = entry.minutesToCutoff
+        guard m > 0 else { return "— · —" }
         let h = Int(m / 60)
         let min = Int(m.truncatingRemainder(dividingBy: 60))
         return String(format: "%02d:%02d", h, min)

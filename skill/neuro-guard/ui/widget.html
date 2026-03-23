@@ -262,7 +262,7 @@
     let minutesRemaining = 165; // for countdown tick when no telemetry
 
     function formatCountdown(min) {
-      if (min <= 0) return '00:00:00';
+      if (min == null || min <= 0) return '— · — · —';
       const h = Math.floor(min / 60);
       const m = Math.floor(min % 60);
       const s = Math.floor((min % 1) * 60) || 0;
@@ -286,8 +286,16 @@
     function applyTelemetry(data) {
       const tier = data.tier || 'OK';
       setTier(tier);
-      minutesRemaining = Math.max(0, data.minutes_to_cutoff || 0);
-      document.getElementById('ui-countdown').innerText = formatCountdown(minutesRemaining);
+      const raw = data.minutes_to_cutoff;
+      const idle = data.idle_reason;
+      // No active cutoff window: do not show 00:00:00 (telemetry uses 0 when guard is off).
+      if (idle || raw == null || raw <= 0) {
+        minutesRemaining = 0;
+        document.getElementById('ui-countdown').innerText = '— · — · —';
+      } else {
+        minutesRemaining = raw;
+        document.getElementById('ui-countdown').innerText = formatCountdown(minutesRemaining);
+      }
       document.getElementById('ui-target').innerText = data.cutoff_time || '—';
       document.getElementById('ui-event-title').innerText = data.event_title || '—';
       document.getElementById('ui-event-time').innerText = data.event_time ? `Tomorrow ${data.event_time}` : '—';

@@ -45,7 +45,8 @@ def load_telemetry() -> dict | None:
 
 
 def format_countdown(minutes: float) -> str:
-    if minutes is None or minutes < 0:
+    # Only positive minutes are a real "time until cutoff"; 0 from telemetry means idle / no event.
+    if minutes is None or minutes <= 0:
         return "—"
     h = int(minutes // 60)
     m = int(minutes % 60)
@@ -85,7 +86,10 @@ class NeuroGuardApp(rumps.App):
             tier = self.telemetry.get("tier", "OK")
             sym = TIER_MENUBAR_SYMBOL.get(tier, TIER_MENUBAR_SYMBOL["OK"])
             mins = self.telemetry.get("minutes_to_cutoff")
-            if mins is not None and mins >= 0:
+            idle_reason = self.telemetry.get("idle_reason")
+            if idle_reason:
+                self.title = f"{sym} —"
+            elif mins is not None and mins > 0:
                 self.title = f"{sym} {format_countdown(mins)}"
             else:
                 self.title = f"{sym} {TIER_LABELS.get(tier, 'NOMINAL')}"
