@@ -24,12 +24,14 @@ TIER_LABELS = {
     "LOCK": "LOCKDOWN",
 }
 
-TIER_EMOJI = {
-    "OK": "🟢",
-    "WARN": "🟡",
-    "DIM": "🟡",
-    "FINAL_WARN": "🟠",
-    "LOCK": "🔴",
+# Menu bar title: no emoji (emoji renders as glossy color blobs). Use monochrome
+# Unicode shapes — same semantics as NeuroGuard.app SF Symbols.
+TIER_MENUBAR_SYMBOL = {
+    "OK": "\u25cb",  # ○ white circle
+    "WARN": "\u0021",  # !
+    "DIM": "\u0021",
+    "FINAL_WARN": "\u25b3",  # △ triangle outline
+    "LOCK": "\u25a0",  # ■ black square (filled, renders as template-like solid)
 }
 
 
@@ -71,7 +73,7 @@ def start_serve_background():
 
 class NeuroGuardApp(rumps.App):
     def __init__(self):
-        super().__init__("Neuro Guard", title="🟢")
+        super().__init__("Neuro Guard", title=TIER_MENUBAR_SYMBOL["OK"])
         self.telemetry: dict | None = None
         self.timer = rumps.Timer(self._on_tick, 10)
         self.timer.start()
@@ -81,14 +83,14 @@ class NeuroGuardApp(rumps.App):
         self.telemetry = load_telemetry()
         if self.telemetry:
             tier = self.telemetry.get("tier", "OK")
-            emoji = TIER_EMOJI.get(tier, "🟢")
+            sym = TIER_MENUBAR_SYMBOL.get(tier, TIER_MENUBAR_SYMBOL["OK"])
             mins = self.telemetry.get("minutes_to_cutoff")
             if mins is not None and mins >= 0:
-                self.title = f"{emoji} {format_countdown(mins)}"
+                self.title = f"{sym} {format_countdown(mins)}"
             else:
-                self.title = f"{emoji} {TIER_LABELS.get(tier, 'NOMINAL')}"
+                self.title = f"{sym} {TIER_LABELS.get(tier, 'NOMINAL')}"
         else:
-            self.title = "🟢 —"
+            self.title = f"{TIER_MENUBAR_SYMBOL['OK']} —"
 
     @rumps.clicked("Open full view")
     def open_full_view(self, _):

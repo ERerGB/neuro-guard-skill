@@ -89,7 +89,7 @@ The daemon runs in the background via LaunchAgent. You get macOS notifications a
    ```bash
    ./scripts/run-tray.sh
    ```
-   Requires `pip install rumps`. Shows tier + countdown; "Open full view" starts the web server and opens the full widget in browser.
+   Requires `pip install rumps`. Menu bar uses **monochrome symbols** (no colored emoji); "Open full view" starts the web server and opens the full widget in browser.
 
 6. **Widget** (optional) — full web view, or run standalone:
    ```bash
